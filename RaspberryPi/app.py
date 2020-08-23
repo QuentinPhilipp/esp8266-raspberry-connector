@@ -40,6 +40,7 @@ def sensor():
         manager.addSensor(data)
     elif data["connection"]=="continue":
         print("Continue connection")
+        manager.updateTTL(data)
     return "OK"
 
 

@@ -27,21 +27,23 @@ class Manager(object):
             self.sensorsList.append(newSensor)
             print("Sensor added in the list")
 
+    def updateTTL(self,data):
+        for sensor in self.sensorsList:
+            if sensor.id == data["id"]:
+                sensor.idle=time.time()+data["idle"]
+                print("Updated TTL of sensor ",sensor.id)
+
+
     def checkSensorTTL(self):
         for sensor in self.sensorsList:
-            print(time.time())
             if sensor.idle<time.time():
                 self.sensorsList.remove(sensor)
-                print("Remove one sensor")
-
-        print("Sensor List :",self.sensorsList)
-
+                print("Remove sensor ",sensor.id)
 
 
 class Sensor(object):
     """docstring for Sensor."""
-
-    def __init__(self,id,idle,name):
+    def __init__(self,id,idle=60,name="None"):
         super(Sensor, self).__init__()
         self.id = id
         self.idle= idle
