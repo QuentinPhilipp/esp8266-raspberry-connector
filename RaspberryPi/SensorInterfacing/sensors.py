@@ -23,7 +23,6 @@ class Manager(object):
             ttl = time.time() + data["idle"]
 
             newSensor = Sensor(data['id'],ttl,data['name'])
-            print(ttl)
             self.sensorsList.append(newSensor)
             print("Sensor added in the list")
 
@@ -32,6 +31,10 @@ class Manager(object):
             if sensor.id == data["id"]:
                 sensor.idle=time.time()+data["idle"]
                 print("Updated TTL of sensor ",sensor.id)
+                break
+        else :
+            print("Sensor not in the list -> Adding the sensor in the list of connected sensor")
+            self.addSensor(data)
 
 
     def checkSensorTTL(self):
@@ -39,6 +42,14 @@ class Manager(object):
             if sensor.idle<time.time():
                 self.sensorsList.remove(sensor)
                 print("Remove sensor ",sensor.id)
+
+    def isInSensorList(self,id):
+        for sensor in self.sensorsList:
+            if sensor.id == id:
+                return True
+        else:
+            return False
+
 
 
 class Sensor(object):
