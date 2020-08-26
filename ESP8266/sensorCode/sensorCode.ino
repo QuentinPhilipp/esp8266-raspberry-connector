@@ -79,35 +79,35 @@ void handleNotFound(){
 }
 
 void handshake(){
-  String data = "{'status':'OK','device_name':'";
+  String data = "{\"status\":\"OK\",\"device_name\":\"";
   data = data +device_name;
-  data = data + "'}";
+  data = data + "\"}";
   server.send(200, "json/application", data);
 }
 
 void temperatureCallback(){
-  String data = "{'status':'OK','device_name':'";
+  String data = "{\"status\":\"OK\",\"device_name\":\"";
   data = data +device_name;
-  data = data + "','metric_name':'temperature','value':'";
+  data = data + "\",\"metric_name\":\"temperature\",\"value\":\"";
 
   // Get the temperature
   double value = getTemperature();
   data.concat(value);
 
-  data = data +  "'}";
+  data = data +  "\"}";
   server.send(200, "json/application", data);
 }
 
 void humidityCallback(){
-  String data = "{'status':'OK','device_name':'";
+  String data = "{\"status\":\"OK\",\"device_name\":\"";
   data = data +device_name;
-  data = data + "','metric_name':'humidity','value':'";
+  data = data + "\",\"metric_name\":\"humidity\",\"value\":\"";
 
   // Get the temperature
   double value = getTemperature();
   data.concat(value);
 
-  data = data +  "'}";
+  data = data +  "\"}";
   server.send(200, "json/application", data);
 }
 
