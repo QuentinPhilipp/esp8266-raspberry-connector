@@ -3,19 +3,31 @@
 #include <WiFiClient.h>
 #include <ESP8266mDNS.h>
 #include <ESP8266WebServer.h>   // Include the WebServer library
+#include "config.h"
+
 
 char* device_name = "ROOM_1";
+char *availableMetrics[] = {"temperature", "humidity"};
 
-ESP8266WebServer server(80);    // Create a webserver object that listens for HTTP request on port 80
-
-void handleRoot();
-void handshake();
-void handleNotFound();
-
-#include "config.h"
 
 const char* ssid     = WIFI_SSID;         // The SSID (name) of the Wi-Fi network you want to connect to
 const char* password = WIFI_PASSWORD;     // The password of the Wi-Fi network
+
+ESP8266WebServer server(80);    // Create a webserver object that listens for HTTP request on port 80
+
+// Default server routes
+void handleRoot();      // "/"
+void handleNotFound();  //  404
+
+// Custom server routes
+void handshake();
+void temperatureCallback();
+void humidityCallback();
+
+// Metrics measurements
+double getTemperature();
+double getHumidity();
+
 
 void setup() {
   Serial.begin(9600);         // Start the Serial communication to send messages to the computer
@@ -24,33 +36,34 @@ void setup() {
 
   WiFi.begin(ssid, password);             // Connect to the network
   Serial.print("Connecting to ");
-  Serial.print(ssid); Serial.println(" ...");
+  Serial.print(ssid);
+  Serial.println(" ...");
 
-  int i = 0;
-  while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
-    delay(1000);
-    Serial.print(++i); Serial.print(' ');
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
   }
-
-  Serial.println('\n');
-  Serial.print("Connected to ");
+  Serial.print("\nConnected to ");
   Serial.println(WiFi.SSID());              // Tell us what network we're connected to
   Serial.print("IP address:\t");
   Serial.println(WiFi.localIP());           // Send the IP address of the ESP8266 to the computer
 
-  if (MDNS.begin("esp8266")) {              // Start the mDNS responder for esp8266.local
-    Serial.println("mDNS responder started");
-  } else {
-    Serial.println("Error setting up MDNS responder!");
-  }
+  if (MDNS.begin("esp8266")) { Serial.println("mDNS responder started"); }
+  else { Serial.println("Error setting up MDNS responder!"); }
 
-  server.on("/", handleRoot);               // Call the 'handleRoot' function when a client requests URI "/"
-  server.onNotFound(handleNotFound);        // When a client requests an unknown URI (i.e. something other than "/"), call function "handleNotFound"
-  server.on("/check", handshake);               // Call the 'handshake' function
 
-  server.begin();                           // Actually start the server
+  // Setup routes
+  server.on("/", handleRoot);               // Root request
+  server.onNotFound(handleNotFound);        // 404 Error
+
+  // Custom routes
+  server.on("/check", handshake);
+  server.on("/temperature", temperatureCallback);
+  server.on("/humidity", humidityCallback);
+
+  // Start the server
+  server.begin();
   Serial.println("HTTP server started");
-
 }
 
 void loop(void){
@@ -69,6 +82,39 @@ void handshake(){
   String data = "{'status':'OK','device_name':'";
   data = data +device_name;
   data = data + "'}";
-
   server.send(200, "json/application", data);
+}
+
+void temperatureCallback(){
+  String data = "{'status':'OK','device_name':'";
+  data = data +device_name;
+  data = data + "','metric_name':'temperature','value':'";
+
+  // Get the temperature
+  double value = getTemperature();
+  data.concat(value);
+
+  data = data +  "'}";
+  server.send(200, "json/application", data);
+}
+
+void humidityCallback(){
+  String data = "{'status':'OK','device_name':'";
+  data = data +device_name;
+  data = data + "','metric_name':'humidity','value':'";
+
+  // Get the temperature
+  double value = getTemperature();
+  data.concat(value);
+
+  data = data +  "'}";
+  server.send(200, "json/application", data);
+}
+
+double getTemperature(){
+  return 28;
+}
+
+double getHumidity(){
+  return 10;
 }
