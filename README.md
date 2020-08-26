@@ -1,6 +1,6 @@
 # sensor-connector
 
-This code allows to retrieve data from different Arduinos or ESP8266 to a Raspberry PI which manages the synchronization of the data and send it to a Firebase database.
+This code allows to retrieve data from different ESP8266 to a Raspberry PI which manages the synchronization of the data and send it to a Firebase database.
 
 ## Connection
 The boards and the RaspberryPI needs to be on the same local network.
