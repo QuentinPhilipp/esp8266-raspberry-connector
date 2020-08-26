@@ -1,4 +1,4 @@
-# sensor-connector
+# esp8266-raspberry-connector
 
 This code allows to retrieve data from different ESP8266 to a Raspberry PI which manages the synchronization of the data and send it to a Firebase database.
 
