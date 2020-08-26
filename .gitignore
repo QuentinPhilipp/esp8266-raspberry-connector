@@ -26,8 +26,12 @@
 *.sql
 *.sqlite
 *.db
-.env
 sqlite_db
+
+# Config and passwords #
+######################
+.env
+config.h
 
 
 # OS generated files #

@@ -12,8 +12,10 @@ void handleRoot();
 void handshake();
 void handleNotFound();
 
-const char* ssid     = "Livebox-D1F5";         // The SSID (name) of the Wi-Fi network you want to connect to
-const char* password = "752F52EA9A0A06597356745910";     // The password of the Wi-Fi network
+#include "config.h"
+
+const char* ssid     = WIFI_SSID;         // The SSID (name) of the Wi-Fi network you want to connect to
+const char* password = WIFI_PASSWORD;     // The password of the Wi-Fi network
 
 void setup() {
   Serial.begin(9600);         // Start the Serial communication to send messages to the computer
