@@ -102,6 +102,8 @@ while True:
 
     # Store the data
 
+    # TODO: 
+
     # Sleep until next measures
     time.sleep(15)
 
