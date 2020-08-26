@@ -79,9 +79,24 @@ void handleNotFound(){
 }
 
 void handshake(){
+
+  String sensorsList= "";
+  for (int i=0; i < (sizeof(availableMetrics) / sizeof(availableMetrics[0])); i++) {
+    sensorsList = sensorsList + "\"";
+    sensorsList = sensorsList + availableMetrics[i];
+    sensorsList = sensorsList + "\",";
+  }
+  // Remove last char
+  int length = sensorsList.length();
+  sensorsList.remove(length-1);
+
+
+
   String data = "{\"status\":\"OK\",\"device_name\":\"";
   data = data +device_name;
-  data = data + "\"}";
+  data = data + "\",\"sensors\":[";
+  data = data +sensorsList;
+  data = data +"]}";
   server.send(200, "json/application", data);
 }
 
